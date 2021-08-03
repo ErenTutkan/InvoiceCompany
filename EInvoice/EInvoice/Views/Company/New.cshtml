@@ -1,0 +1,96 @@
+﻿
+@{
+    ViewBag.Title = "New";
+}
+
+<div class="card p-3">
+    <h2>Yeni Resmi Firma Ekleme</h2>
+    <form>
+        <div class="mb-3">
+            <label for="CompanyName" class="form-label">Şirket Adı</label>
+            <input type="text" class="form-control" id="CompanyName" placeholder="" required />
+        </div>
+        <div class="mb-3">
+            <label for="CompanyDesc" class="form-label">Şirket Açıklaması</label>
+            <textarea class="form-control" id="CompanyDesc" rows="3"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="TelNo" class="form-label">Şirket Telefon Numarası</label>
+            <input type="text" class="form-control" id="TelNo" placeholder="05*********" />
+        </div>
+        <div class="mb-3">
+            <label for="Email" class="form-label">Email Adresi</label>
+            <input type="email" class="form-control" id="Email" placeholder="company@('@')company.com" />
+        </div>
+        <div class="mb-3">
+            <label for="CompanyAddress" class="form-label">Şirket Adresi</label>
+            <textarea class="form-control" id="CompanyAddress" rows="2"></textarea>
+        </div>
+        <div class="mb-3">
+            <button class="btn btn-primary btn-circle px-2 animate-right-1" type="button" id="add_button">Şirket Ekle</button>
+        </div>
+
+    </form>
+</div>
+@section Css{
+    <link rel="stylesheet" href="~/Content/vendor/izitoast/css/iziToast.min.css">
+}
+@section scripts{
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="~/Content/vendor/izitoast/js/iziToast.min.js"></script>
+    <script>
+        
+        $("#add_button").click(function () {
+            var $companyname = $("#CompanyName").val();
+            var $companyDesc = $("#CompanyDesc").val();
+            var $telno = $("#TelNo").val();
+            var $email = $("#Email").val();
+            var $companyAddress = $("#CompanyAddress").val();
+            var formdata = new FormData();
+            formdata.append("companyname", $companyname);
+            formdata.append("companydesc", $companyDesc);
+            formdata.append("telno", $telno);
+            formdata.append("email", $email);
+            formdata.append("companyaddress", $companyAddress);
+            formdata.append("companytype",1)
+            $.ajax({
+                url: "/Company/Add",
+                type: "POST",
+                data: formdata,
+                contentType: false,
+                processData: false,
+                beforeSend: false,
+                complete: false,
+                success: function (data) {
+                    if (data != "Failed") {
+                        iziToast.success({
+                            title: "Başarılı",
+                            message: "Şirket Başarılı Bir Şekilde Eklendi.",
+                            position: "topCenter"
+                        })
+                        setTimeout(function () {
+                            document.location="/Company/Index?comtype=1";
+                        },1000)
+                    }
+                    else {
+                        console.log("abc")
+                        iziToast.error({
+                            title: "Hata",
+                            message: "Ekleme Başarısız Oldu",
+                            position:"topCenter"
+                        })
+                    }
+                },
+                error: function () {
+                    iziToast.error({
+                        title: "Hata",
+                        message: "Ekleme Başarısız Oldu",
+                        position: "topCenter"
+                    })
+                }
+            })
+        });
+
+       
+    </script>
+}  

@@ -1,0 +1,75 @@
+﻿
+@{
+    ViewBag.Title = "Register";
+}
+
+<div class="card">
+    <div class="card-body">
+        <form>
+            <div class="mb-3">
+                <label for="username" class="form-label">Kullanıcı Adı</label>
+                <input type="text" class="form-control" id="username" required />
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Şifre</label>
+                <input type="password" class="form-control" id="password" required />
+            </div>
+            <div class="mb-3">
+                <button type="button" class="btn btn-primary" id="register_button">Kayıt Et</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+@section Css{
+    <link rel="stylesheet" href="~/Content/vendor/izitoast/css/iziToast.min.css">
+}
+@section scripts{
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="~/Content/vendor/izitoast/js/iziToast.min.js"></script>
+    <script>
+        $("#register_button").click(function () {
+            var username = $("#username").val();
+            var password = $("#password").val();
+            var formdata = new FormData();
+            formdata.append("username", username);
+            formdata.append("password", password);
+            $.ajax({
+                url: "/User/Add",
+                type: "POST",
+                data: formdata,
+                contentType: false,
+                processData: false,
+                beforeSend: false,
+                complete: false,
+                success: function (data) {
+                    if (data != "Failed") {
+                        iziToast.success({
+                            title: "Başarılı",
+                            message: "Kullanıcı Başarılı Bir Şekilde Eklendi.",
+                            position: "topCenter"
+                        })
+                        setTimeout(function () {
+                            document.location = "/User/Index";
+                        }, 1000)
+                    }
+                    else {
+                        iziToast.error({
+                            title: "Hata",
+                            message: "Kullanıcı Eklenemedi.",
+                            position: "topCenter"
+                        })
+                    }
+                },
+                    error: function() {
+                        iziToast.error({
+                            title: "Hata",
+                            message: "Kullanıcı Eklenemedi.",
+                            position: "topCenter"
+                        })
+                    }
+                
+            })
+        });
+    </script>
+}

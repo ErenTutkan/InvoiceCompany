@@ -1,0 +1,110 @@
+﻿
+@{
+    Layout = null;
+}
+
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <meta name="description" content="Login - Register Template">
+    <meta name="author" content="Lorenzo Angelino aka MrLolok">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="~/Content/css/login.css">
+    <link rel="stylesheet" href="~/Content/vendor/izitoast/css/iziToast.min.css">
+    <style>
+        body {
+            background-color: #303641;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container-login">
+        <div id="title">
+            <i class="material-icons lock">lock</i> Giriş
+        </div>
+
+        <form>
+            <div class="input">
+                <div class="input-addon">
+                    <i class="material-icons">face</i>
+                </div>
+                <input id="username" placeholder="Kullanıcı Adı" type="text" required class="validate" autocomplete="off">
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="input">
+                <div class="input-addon">
+                    <i class="material-icons">vpn_key</i>
+                </div>
+                <input id="password" placeholder="Şifre" type="password" required class="validate" autocomplete="off">
+            </div>
+
+            <div class="remember-me">
+
+            </div>
+
+            <button type="button" id="login_button" class="btn mt-2"> Giriş Yap</button>
+        </form>
+
+
+
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="~/Content/vendor/izitoast/js/iziToast.min.js"></script>
+    <script>
+        $("#login_button").click(function () {
+            var username = $("#username").val();
+            var password = $("#password").val();
+            var formdata = new FormData();
+            formdata.append("username", username);
+            formdata.append("password", password);
+            $.ajax({
+                url: "/Login/UserLogin",
+                type: "POST",
+                data: formdata,
+                contentType: false,
+                processData: false,
+                beforeSend: false,
+                complete: false,
+                success: function (data) {
+                    console.log(data)
+                    if (data != "Failed") {
+                        iziToast.success({
+                            title: "Başarılı",
+                            message: "Giriş Başarılı Yönlendiriliyorsunuz.",
+                            position: "topCenter"
+                        })
+                        setTimeout(function () {
+                            document.location = "/Home/Index"
+                        }, 500)
+                    }
+                    else {
+                        iziToast.error({
+                            title: "Hata",
+                            message: "Kullanıcı Adı veya Şifre Yanlış",
+                            position: "topCenter"
+                        })
+                    }
+                },
+                    error: function() {
+                        iziToast.error({
+                            title: "Hata",
+                            message: "Kullanıcı Adı veya Şifre Yanlış",
+                            position: "topCenter"
+                        })
+                    }
+                
+            })
+        });
+
+    </script>
+    
+</body>
+
+</html>
+

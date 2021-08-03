@@ -1,0 +1,119 @@
+﻿@model DatabaseFunction.Model.CompanyProductsModel
+@{
+    var company = Model.company;
+    var products = Model.products;
+    ViewBag.Title = "New";
+}
+
+
+<div class="card p-3">
+    <h2>Resmi Fatura Girdisi</h2>
+    <h3 class="text-end"> @DateTime.Now</h3>
+    <form>
+        <div class="mb-3">
+            <select id="product" class="form-control">
+                <option value=""> Seçiniz</option>
+                @foreach (var item in products)
+                {
+                    <option value="@item.ID">@item.ProductName</option>
+                }
+
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="Weight" class="form-label">Ürün Ağırlığı</label>
+            <input type="text" class="form-control" id="Weight" />
+        </div>
+        <div class="mb-3">
+            <label for="UnitPrice" class="form-label">Birim Fiyatı</label>
+            <input type="text" class="form-control" id="UnitPrice" placeholder="12.3" />
+            <button type="button" class="btn btn-primary btn-sm mt-2" id="calculate">Hesapla</button>
+        </div>
+        <div class="mb-3">
+            <label for="Amount" class="form-label">Toplam Tutar</label>
+            <input type="text" class="form-control" id="Amount" disabled placeholder="" />
+        </div>
+        <div class="mb-3">
+            <label for="Desc" class="form-label">Açıklama</label>
+            <textarea class="form-control" id="Desc" rows="2"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="Paid" class="form-label">Ödenen Tutar</label>
+            <input type="text" class="form-control" id="Paid" placeholder="" />
+        </div>
+
+        <div class="mb-3">
+            <button class="btn btn-primary btn-circle px-2 animate-right-1" type="button" id="add_button" data-company-id="@company.ID">Fatura Çıktısı Ekle</button>
+        </div>
+
+    </form>
+</div>
+@section Css{
+    <link rel="stylesheet" href="~/Content/vendor/izitoast/css/iziToast.min.css">
+}
+@section scripts{
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="~/Content/vendor/izitoast/js/iziToast.min.js"></script>
+    <script>
+        $("#calculate").click(function () {
+            var $weight = $("#Weight").val();
+            var $unitprice = $("#UnitPrice").val();
+            var $amount = $("#Amount").val($weight * $unitprice);
+        })
+        $("#add_button").click(function () {
+            $productid = $("#product").val();
+            var $weight = $("#Weight").val();
+            var $unitprice = $("#UnitPrice").val();
+            var $amount = $("#Amount").val();
+            var $desc = $("#Desc").val();
+            var $paid = $("#Paid").val();
+            var formdata = new FormData();
+            formdata.append("productid", $productid);
+            formdata.append("weight", $weight);
+            formdata.append("unitprice", $unitprice);
+            formdata.append("amount", $amount);
+            formdata.append("desc", $desc);
+            formdata.append("paid", $paid);
+            formdata.append("companyid", $(this).data("company-id"))
+            formdata.append("invoicetype",2)
+            $.ajax({
+                url: "/Invoice/Add",
+                type: "POST",
+                data: formdata,
+                contentType: false,
+                processData: false,
+                beforeSend: false,
+                complete: false,
+                success: function (data) {
+                    if (data != "Failed") {
+                        iziToast.success({
+                            title: "Başarılı",
+                            message: " Fatura Girdisi Başarılı Bir Şekilde Eklendi.",
+                            position: "topCenter"
+                        })
+                        setTimeout(function () {
+                            document.location="/Invoice/Index";
+                        },1000)
+                    }
+                    else {
+                        console.log("abc")
+                        iziToast.error({
+                            title: "Hata",
+                            message: "Ekleme Başarısız Oldu",
+                            position:"topCenter"
+                        })
+                    }
+                },
+                error: function () {
+                    iziToast.error({
+                        title: "Hata",
+                        message: "Ekleme Başarısız Oldu",
+                        position: "topCenter"
+                    })
+                }
+            })
+        });
+
+
+    </script>
+}  

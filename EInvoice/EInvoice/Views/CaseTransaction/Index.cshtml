@@ -1,0 +1,77 @@
+﻿@model  List<CasingTransaction>
+@{
+
+    ViewBag.Title = "Index";
+}
+
+
+<div class="card bg-white">
+    <div class="card-header d-flex flex">
+
+        <a href="/CaseTransaction/Entry/" class="btn btn-primary text-end">Para Girişi</a>
+        <a href="/CaseTransaction/Out/" class="btn btn-primary text-end mx-3">Para Çıkışı</a>
+
+
+
+    </div>
+    <div class="card-body">
+        <table id="table" data-order='[[ 0, "desc" ]]' class="table table-striped " style="width:100%">
+            <thead>
+                <tr>
+                    <th>Tarih</th>
+                    <th>İsmi</th>
+                    <th>Açıklaması</th>
+                    <th>Yapılan İşlem</th>
+                    <th>İşlemi Gerçekleştiren</th>
+                    <th>Ödenen Tutar</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Date</td>
+                        <td>@item.Name</td>
+                        <td>@item.Description</td>
+                        <td>
+                            @if (item.TransactionType == 1)
+                            {
+                                <span class="text-success">Girdi</span>
+                            }
+                            else
+                            {
+                                <span class="text-danger">Çıktı</span>
+                            }
+                    </td>
+                    <td>
+                        @item.SystemUser.Username
+                </td>
+                <td>@item.Paid</td>
+
+            </tr>
+
+        }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Css{
+    <link href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Content/vendor/izitoast/css/iziToast.min.css">
+}
+@section scripts{
+    <script src="~/Content/vendor/izitoast/js/iziToast.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#table').DataTable();
+        })
+    </script>
+
+
+}

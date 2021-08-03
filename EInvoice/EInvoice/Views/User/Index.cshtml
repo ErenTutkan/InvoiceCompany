@@ -1,0 +1,104 @@
+﻿@model  List<SystemUser>
+@{
+
+    ViewBag.Title = "Index";
+}
+
+
+<div class="card bg-white">
+    <div class="card-header d-flex flex">
+        <a class="btn btn-primary" href="/User/Register">Yeni Kullanıcı Ekle</a>
+
+
+    </div>
+    <div class="card-body">
+        <table id="table" class="table table-striped " style="width:100%">
+            <thead>
+                <tr>
+                    <th>Kullanıcı Adı</th>
+                    <th>Rolü</th>
+                    <th>İşlemler</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Username</td>
+                        <td>@item.Roles.RoleName</td>
+                        <td><a class="btn btn-primary" href="/User/Detail?userid=@item.ID">Güncelle</a> <button class="btn btn-danger deletebutton" data-user-id="@item.ID"><i class="bi bi-trash"></i><span>Sil</span></button></td>
+                    </tr>
+                }
+
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Css{
+    <link rel="stylesheet" href="~/Content/vendor/izitoast/css/iziToast.min.css">
+    <link href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css" rel="stylesheet" />
+}
+@section scripts{
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/vendor/izitoast/js/iziToast.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#table').DataTable();
+        })
+        $(".deletebutton").click(function () {
+            swal({
+                title: "Kullanıcı Silinecek",
+                text: "Silmek İstiyor Musunuz ?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+
+                        var formdata = new FormData();
+                        var $id = $(this).data("user-id");
+                        formdata.append("userid", $id);
+                        $.ajax({
+                            url: "/User/Delete",
+                            method: "POST",
+                            data: formdata,
+                            contentType: false,
+                            processData: false,
+                            beforeSend: false,
+                            complete: false,
+                            success: function (data) {
+                                if (data != "Failed") {
+                                    iziToast.success({
+                                        title: "Başarılı", message: "İşlem Başarı ile Gerçekleşti.", position: "topCenter"
+                                    });
+                                    setTimeout(function () { document.location = "/User/Index" }, 100)
+                                }
+                                else {
+                                    iziToast.error({
+                                        title: "Hata", message: "Silme işlemi Gerçekleşmedi", position: "topCenter"
+                                    });
+                                }
+                            },
+                            error: function () {
+                                iziToast.error({
+                                    title: "Hata", message: "Silme işlemi Gerçekleşmedi", position: "topCenter"
+                                });
+                            }
+                        });
+                    } else {
+                        swal("İşlem Gerçekleşmedi.");
+                    }
+                })
+        })
+    </script>
+
+
+}

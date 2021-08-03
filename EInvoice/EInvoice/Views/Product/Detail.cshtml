@@ -1,0 +1,79 @@
+﻿@model Products
+@{
+    ViewBag.Title = "Detail";
+}
+
+
+@{
+    ViewBag.Title = "New";
+}
+
+<div class="card p-3">
+    <h2>Yeni Malzeme Ekleme</h2>
+    <form>
+        <div class="mb-3">
+            <label for="productName" class="form-label">Malzeme İsmi</label>
+            <input type="text" class="form-control" id="productName" placeholder=""  value="@Model.ProductName"required />
+        </div>
+        <div class="mb-3">
+            <button class="btn btn-primary btn-circle px-2 animate-right-1" type="button" id="add_button" data-product-id="@Model.ID">Malzeme Ekle</button>
+        </div>
+    </form>
+</div>
+
+@section Css{
+    <link rel="stylesheet" href="~/Content/vendor/izitoast/css/iziToast.min.css">
+}
+@section scripts{
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="~/Content/vendor/izitoast/js/iziToast.min.js"></script>
+    <script>
+
+        $("#add_button").click(function () {
+            var $productName = $("#productName").val();
+            var $id = $(this).data("product-id");
+            var formdata = new FormData();
+            formdata.append("id", $id)
+            formdata.append("productName", $productName);
+
+            $.ajax({
+                url: "/Product/Update",
+                type: "POST",
+                data: formdata,
+                contentType: false,
+                processData: false,
+                beforeSend: false,
+                complete: false,
+                success: function (data) {
+                    if (data != "Failed") {
+                        iziToast.success({
+                            title: "Başarılı",
+                            message: "Malzeme Başarılı Bir Şekilde Güncellendi.",
+                            position: "topCenter"
+                        })
+                        setTimeout(function () {
+                            document.location="/Product/Index";
+                        },1000)
+                    }
+                    else {
+                        
+                        iziToast.error({
+                            title: "Hata",
+                            message: "Güncelleme Başarısız Oldu",
+                            position:"topCenter"
+                        })
+                    }
+                },
+                error: function () {
+                    iziToast.error({
+                        title: "Hata",
+                        message: "Güncelleme Başarısız Oldu",
+                        position: "topCenter"
+                    })
+                }
+            })
+        });
+
+
+    </script>
+}

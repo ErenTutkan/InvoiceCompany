@@ -1,0 +1,116 @@
+﻿@model List<Invoices>
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="card bg-white">
+
+    <div class="card-body">
+        <table id="table" data-order='[[ 0, "desc" ]]' class="table table-striped " style="width:100%">
+            <thead>
+                <tr>
+                    <th>Tarih</th>
+                    <th>Firma Adı</th>
+                    <th>Ürün Adı</th>
+                    <th>Kilogram</th>
+                    <th>Birim Fiyatı </th>
+                    <th>Toplam Tutar</th>
+                    <th>Ödenen Tutar</th>
+                    <th>İşlem Türü</th>
+                    <th>İşlemler</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Date</td>
+                        <td>@item.Companies.CompanyName</td>
+                        <td>@item.Products.ProductName</td>
+                        <td>@item.Weight</td>
+                        <td>@item.UnitPrice</td>
+                        <td>@item.Amount</td>
+                        <td>@item.Paid</td>
+                        <td>
+                            @if (item.InvoiceType == 1)
+                            {<span class="text-success">Girdi</span>
+                            }
+                            else
+                            {
+                                <span class="text-danger">Çıktı</span>
+                            }
+                        </td>
+                        <td>
+                            <a class="btn btn-primary my-2" href="/Invoice/Detail?id=@item.ID">Güncelle</a>
+                            <button class="btn btn-danger deletebutton" type="button" data-model-id="@item.ID"><i class="bi bi-trash"></i><span>Sil</span></button>
+                        </td>
+                    </tr>
+
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Css{
+    <link href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Content/vendor/izitoast/css/iziToast.min.css">
+}
+@section scripts{
+    <script src="~/Content/vendor/izitoast/js/iziToast.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#table').DataTable();
+        })
+        $(".deletebutton").click(function () {
+            swal({
+                title: "Fatura Silinecek",
+                text: "Fautra Silinecek Verilere Erişemeyeceksiniz Silmek İstiyor Musunuz ?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+
+                        var formdata = new FormData();
+                        var $id = $(this).data("model-id");
+                        formdata.append("id", $id);
+                        $.ajax({
+                            url: "/OfficialInvoice/Delete",
+                            method: "POST",
+                            data: formdata, contentType: false,
+                            processData: false,
+                            success: function (data) {
+                                if (data != "Failed") {
+                                    iziToast.success({
+                                        title: "Başarılı", message: "İşlem Başarı ile Gerçekleşti.", position: "topCenter"
+                                    });
+                                    setTimeout(function () { document.location = "/Invoice/Index" }, 100)
+                                }
+                                else {
+                                    iziToast.error({
+                                        title: "Hata", message: "Silme işlemi Gerçekleşmedi", position: "topCenter"
+                                    });
+                                }
+                            },
+                            error: function () {
+                                iziToast.error({
+                                    title: "Hata", message: "Silme işlemi Gerçekleşmedi", position: "topCenter"
+                                });
+                            }
+                        });
+                    } else {
+                        swal("İşlem Gerçekleşmedi.");
+                    }
+                })
+        })
+    </script>
+
+
+}

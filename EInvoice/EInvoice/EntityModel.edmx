@@ -1,0 +1,677 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="InvoiceWebsiteModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Casing">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date" Type="date" />
+          <Property Name="cash" Type="float" />
+        </EntityType>
+        <EntityType Name="CasingTransaction">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date" Type="datetime" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="TransactionType" Type="int" />
+          <Property Name="Description" Type="text" />
+          <Property Name="Create_At" Type="int" />
+          <Property Name="Paid" Type="float" />
+        </EntityType>
+        <EntityType Name="Companies">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyName" Type="nvarchar" MaxLength="50" />
+          <Property Name="CompanyDescription" Type="nvarchar" MaxLength="300" />
+          <Property Name="CompanyTelNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="CompanyEmail" Type="nvarchar" MaxLength="150" />
+          <Property Name="CompanyAddress" Type="nvarchar" MaxLength="350" />
+          <Property Name="CompanyType" Type="int" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="DeleteDate" Type="datetime" />
+          <Property Name="Status" Type="int" />
+        </EntityType>
+        <EntityType Name="CompanyTransactions">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date" Type="datetime" />
+          <Property Name="CompanyID" Type="int" />
+          <Property Name="Cash" Type="float" />
+        </EntityType>
+        <EntityType Name="Invoices">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date" Type="datetime" />
+          <Property Name="CompanyID" Type="int" />
+          <Property Name="ProductId" Type="int" />
+          <Property Name="InvoiceType" Type="int" />
+          <Property Name="Weight" Type="float" />
+          <Property Name="UnitPrice" Type="float" />
+          <Property Name="Amount" Type="float" />
+          <Property Name="Description" Type="text" />
+          <Property Name="Paid" Type="float" />
+          <Property Name="Create_At" Type="int" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="DeleteDate" Type="datetime" />
+          <Property Name="Status" Type="int" />
+        </EntityType>
+        <EntityType Name="OfficialInvoices">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyID" Type="int" />
+          <Property Name="Date" Type="datetime" />
+          <Property Name="WaybillNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="InvoiceNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="Amount" Type="float" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="Paid" Type="float" />
+          <Property Name="Create_At" Type="int" />
+          <Property Name="entry_printout" Type="int" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="DeleteDate" Type="datetime" />
+          <Property Name="Status" Type="int" />
+        </EntityType>
+        <EntityType Name="Products">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="SystemUser">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="nvarchar" MaxLength="50" />
+          <Property Name="Password" Type="nvarchar" MaxLength="150" />
+          <Property Name="RoleID" Type="int" />
+          <Property Name="Create_Date" Type="datetime" />
+          <Property Name="Update_Date" Type="datetime" />
+          <Property Name="Delete_Date" Type="datetime" />
+          <Property Name="Status" Type="int" />
+        </EntityType>
+        <Association Name="FK_CasingTransaction_CasingTransaction">
+          <End Role="SystemUser" Type="Self.SystemUser" Multiplicity="0..1" />
+          <End Role="CasingTransaction" Type="Self.CasingTransaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SystemUser">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CasingTransaction">
+              <PropertyRef Name="Create_At" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CompanyTransactions_Companies">
+          <End Role="Companies" Type="Self.Companies" Multiplicity="0..1" />
+          <End Role="CompanyTransactions" Type="Self.CompanyTransactions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Companies">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CompanyTransactions">
+              <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invoices_Companies">
+          <End Role="Companies" Type="Self.Companies" Multiplicity="0..1" />
+          <End Role="Invoices" Type="Self.Invoices" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Companies">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Invoices">
+              <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invoices_Product">
+          <End Role="Products" Type="Self.Products" Multiplicity="0..1" />
+          <End Role="Invoices" Type="Self.Invoices" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Invoices">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invoices_SystemUser">
+          <End Role="SystemUser" Type="Self.SystemUser" Multiplicity="0..1" />
+          <End Role="Invoices" Type="Self.Invoices" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SystemUser">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Invoices">
+              <PropertyRef Name="Create_At" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OfficialInvoice_Companies">
+          <End Role="Companies" Type="Self.Companies" Multiplicity="0..1" />
+          <End Role="OfficialInvoices" Type="Self.OfficialInvoices" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Companies">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OfficialInvoices">
+              <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OfficialInvoice_SystemUser">
+          <End Role="SystemUser" Type="Self.SystemUser" Multiplicity="0..1" />
+          <End Role="OfficialInvoices" Type="Self.OfficialInvoices" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SystemUser">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OfficialInvoices">
+              <PropertyRef Name="Create_At" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SystemUser_Roles">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="0..1" />
+          <End Role="SystemUser" Type="Self.SystemUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SystemUser">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="InvoiceWebsiteModelStoreContainer">
+          <EntitySet Name="Casing" EntityType="Self.Casing" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CasingTransaction" EntityType="Self.CasingTransaction" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Companies" EntityType="Self.Companies" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CompanyTransactions" EntityType="Self.CompanyTransactions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Invoices" EntityType="Self.Invoices" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OfficialInvoices" EntityType="Self.OfficialInvoices" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SystemUser" EntityType="Self.SystemUser" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_CasingTransaction_CasingTransaction" Association="Self.FK_CasingTransaction_CasingTransaction">
+            <End Role="SystemUser" EntitySet="SystemUser" />
+            <End Role="CasingTransaction" EntitySet="CasingTransaction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CompanyTransactions_Companies" Association="Self.FK_CompanyTransactions_Companies">
+            <End Role="Companies" EntitySet="Companies" />
+            <End Role="CompanyTransactions" EntitySet="CompanyTransactions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invoices_Companies" Association="Self.FK_Invoices_Companies">
+            <End Role="Companies" EntitySet="Companies" />
+            <End Role="Invoices" EntitySet="Invoices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invoices_Product" Association="Self.FK_Invoices_Product">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="Invoices" EntitySet="Invoices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invoices_SystemUser" Association="Self.FK_Invoices_SystemUser">
+            <End Role="SystemUser" EntitySet="SystemUser" />
+            <End Role="Invoices" EntitySet="Invoices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OfficialInvoice_Companies" Association="Self.FK_OfficialInvoice_Companies">
+            <End Role="Companies" EntitySet="Companies" />
+            <End Role="OfficialInvoices" EntitySet="OfficialInvoices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OfficialInvoice_SystemUser" Association="Self.FK_OfficialInvoice_SystemUser">
+            <End Role="SystemUser" EntitySet="SystemUser" />
+            <End Role="OfficialInvoices" EntitySet="OfficialInvoices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SystemUser_Roles" Association="Self.FK_SystemUser_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="SystemUser" EntitySet="SystemUser" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="InvoiceWebsiteModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="InvoiceEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Casing" EntityType="InvoiceWebsiteModel.Casing" />
+          <EntitySet Name="CasingTransaction" EntityType="InvoiceWebsiteModel.CasingTransaction" />
+          <EntitySet Name="Companies" EntityType="InvoiceWebsiteModel.Companies" />
+          <EntitySet Name="CompanyTransactions" EntityType="InvoiceWebsiteModel.CompanyTransactions" />
+          <EntitySet Name="Invoices" EntityType="InvoiceWebsiteModel.Invoices" />
+          <EntitySet Name="OfficialInvoices" EntityType="InvoiceWebsiteModel.OfficialInvoices" />
+          <EntitySet Name="Products" EntityType="InvoiceWebsiteModel.Products" />
+          <EntitySet Name="Roles" EntityType="InvoiceWebsiteModel.Roles" />
+          <EntitySet Name="SystemUser" EntityType="InvoiceWebsiteModel.SystemUser" />
+          <AssociationSet Name="FK_CasingTransaction_CasingTransaction" Association="InvoiceWebsiteModel.FK_CasingTransaction_CasingTransaction">
+            <End Role="SystemUser" EntitySet="SystemUser" />
+            <End Role="CasingTransaction" EntitySet="CasingTransaction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CompanyTransactions_Companies" Association="InvoiceWebsiteModel.FK_CompanyTransactions_Companies">
+            <End Role="Companies" EntitySet="Companies" />
+            <End Role="CompanyTransactions" EntitySet="CompanyTransactions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invoices_Companies" Association="InvoiceWebsiteModel.FK_Invoices_Companies">
+            <End Role="Companies" EntitySet="Companies" />
+            <End Role="Invoices" EntitySet="Invoices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OfficialInvoice_Companies" Association="InvoiceWebsiteModel.FK_OfficialInvoice_Companies">
+            <End Role="Companies" EntitySet="Companies" />
+            <End Role="OfficialInvoices" EntitySet="OfficialInvoices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invoices_Product" Association="InvoiceWebsiteModel.FK_Invoices_Product">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="Invoices" EntitySet="Invoices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invoices_SystemUser" Association="InvoiceWebsiteModel.FK_Invoices_SystemUser">
+            <End Role="SystemUser" EntitySet="SystemUser" />
+            <End Role="Invoices" EntitySet="Invoices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OfficialInvoice_SystemUser" Association="InvoiceWebsiteModel.FK_OfficialInvoice_SystemUser">
+            <End Role="SystemUser" EntitySet="SystemUser" />
+            <End Role="OfficialInvoices" EntitySet="OfficialInvoices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SystemUser_Roles" Association="InvoiceWebsiteModel.FK_SystemUser_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="SystemUser" EntitySet="SystemUser" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Casing">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Precision="0" />
+          <Property Name="cash" Type="Double" />
+        </EntityType>
+        <EntityType Name="CasingTransaction">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Precision="3" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TransactionType" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Create_At" Type="Int32" />
+          <Property Name="Paid" Type="Double" />
+          <NavigationProperty Name="SystemUser" Relationship="InvoiceWebsiteModel.FK_CasingTransaction_CasingTransaction" FromRole="CasingTransaction" ToRole="SystemUser" />
+        </EntityType>
+        <EntityType Name="Companies">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyDescription" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyTelNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyEmail" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyAddress" Type="String" MaxLength="350" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyType" Type="Int32" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="DeleteDate" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Int32" />
+          <NavigationProperty Name="CompanyTransactions" Relationship="InvoiceWebsiteModel.FK_CompanyTransactions_Companies" FromRole="Companies" ToRole="CompanyTransactions" />
+          <NavigationProperty Name="Invoices" Relationship="InvoiceWebsiteModel.FK_Invoices_Companies" FromRole="Companies" ToRole="Invoices" />
+          <NavigationProperty Name="OfficialInvoices" Relationship="InvoiceWebsiteModel.FK_OfficialInvoice_Companies" FromRole="Companies" ToRole="OfficialInvoices" />
+        </EntityType>
+        <EntityType Name="CompanyTransactions">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Precision="3" />
+          <Property Name="CompanyID" Type="Int32" />
+          <Property Name="Cash" Type="Double" />
+          <NavigationProperty Name="Companies" Relationship="InvoiceWebsiteModel.FK_CompanyTransactions_Companies" FromRole="CompanyTransactions" ToRole="Companies" />
+        </EntityType>
+        <EntityType Name="Invoices">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Precision="3" />
+          <Property Name="CompanyID" Type="Int32" />
+          <Property Name="ProductId" Type="Int32" />
+          <Property Name="InvoiceType" Type="Int32" />
+          <Property Name="Weight" Type="Double" />
+          <Property Name="UnitPrice" Type="Double" />
+          <Property Name="Amount" Type="Double" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Paid" Type="Double" />
+          <Property Name="Create_At" Type="Int32" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="DeleteDate" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Int32" />
+          <NavigationProperty Name="Companies" Relationship="InvoiceWebsiteModel.FK_Invoices_Companies" FromRole="Invoices" ToRole="Companies" />
+          <NavigationProperty Name="Products" Relationship="InvoiceWebsiteModel.FK_Invoices_Product" FromRole="Invoices" ToRole="Products" />
+          <NavigationProperty Name="SystemUser" Relationship="InvoiceWebsiteModel.FK_Invoices_SystemUser" FromRole="Invoices" ToRole="SystemUser" />
+        </EntityType>
+        <EntityType Name="OfficialInvoices">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyID" Type="Int32" />
+          <Property Name="Date" Type="DateTime" Precision="3" />
+          <Property Name="WaybillNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="InvoiceNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Amount" Type="Double" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Paid" Type="Double" />
+          <Property Name="Create_At" Type="Int32" />
+          <Property Name="entry_printout" Type="Int32" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="DeleteDate" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Int32" />
+          <NavigationProperty Name="Companies" Relationship="InvoiceWebsiteModel.FK_OfficialInvoice_Companies" FromRole="OfficialInvoices" ToRole="Companies" />
+          <NavigationProperty Name="SystemUser" Relationship="InvoiceWebsiteModel.FK_OfficialInvoice_SystemUser" FromRole="OfficialInvoices" ToRole="SystemUser" />
+        </EntityType>
+        <EntityType Name="Products">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Invoices" Relationship="InvoiceWebsiteModel.FK_Invoices_Product" FromRole="Products" ToRole="Invoices" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="SystemUser" Relationship="InvoiceWebsiteModel.FK_SystemUser_Roles" FromRole="Roles" ToRole="SystemUser" />
+        </EntityType>
+        <EntityType Name="SystemUser">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="RoleID" Type="Int32" />
+          <Property Name="Create_Date" Type="DateTime" Precision="3" />
+          <Property Name="Update_Date" Type="DateTime" Precision="3" />
+          <Property Name="Delete_Date" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Int32" />
+          <NavigationProperty Name="CasingTransaction" Relationship="InvoiceWebsiteModel.FK_CasingTransaction_CasingTransaction" FromRole="SystemUser" ToRole="CasingTransaction" />
+          <NavigationProperty Name="Invoices" Relationship="InvoiceWebsiteModel.FK_Invoices_SystemUser" FromRole="SystemUser" ToRole="Invoices" />
+          <NavigationProperty Name="OfficialInvoices" Relationship="InvoiceWebsiteModel.FK_OfficialInvoice_SystemUser" FromRole="SystemUser" ToRole="OfficialInvoices" />
+          <NavigationProperty Name="Roles" Relationship="InvoiceWebsiteModel.FK_SystemUser_Roles" FromRole="SystemUser" ToRole="Roles" />
+        </EntityType>
+        <Association Name="FK_CasingTransaction_CasingTransaction">
+          <End Type="InvoiceWebsiteModel.SystemUser" Role="SystemUser" Multiplicity="0..1" />
+          <End Type="InvoiceWebsiteModel.CasingTransaction" Role="CasingTransaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SystemUser">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CasingTransaction">
+              <PropertyRef Name="Create_At" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CompanyTransactions_Companies">
+          <End Type="InvoiceWebsiteModel.Companies" Role="Companies" Multiplicity="0..1" />
+          <End Type="InvoiceWebsiteModel.CompanyTransactions" Role="CompanyTransactions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Companies">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CompanyTransactions">
+              <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invoices_Companies">
+          <End Type="InvoiceWebsiteModel.Companies" Role="Companies" Multiplicity="0..1" />
+          <End Type="InvoiceWebsiteModel.Invoices" Role="Invoices" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Companies">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Invoices">
+              <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OfficialInvoice_Companies">
+          <End Type="InvoiceWebsiteModel.Companies" Role="Companies" Multiplicity="0..1" />
+          <End Type="InvoiceWebsiteModel.OfficialInvoices" Role="OfficialInvoices" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Companies">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OfficialInvoices">
+              <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invoices_Product">
+          <End Type="InvoiceWebsiteModel.Products" Role="Products" Multiplicity="0..1" />
+          <End Type="InvoiceWebsiteModel.Invoices" Role="Invoices" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Invoices">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invoices_SystemUser">
+          <End Type="InvoiceWebsiteModel.SystemUser" Role="SystemUser" Multiplicity="0..1" />
+          <End Type="InvoiceWebsiteModel.Invoices" Role="Invoices" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SystemUser">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Invoices">
+              <PropertyRef Name="Create_At" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OfficialInvoice_SystemUser">
+          <End Type="InvoiceWebsiteModel.SystemUser" Role="SystemUser" Multiplicity="0..1" />
+          <End Type="InvoiceWebsiteModel.OfficialInvoices" Role="OfficialInvoices" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SystemUser">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OfficialInvoices">
+              <PropertyRef Name="Create_At" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SystemUser_Roles">
+          <End Type="InvoiceWebsiteModel.Roles" Role="Roles" Multiplicity="0..1" />
+          <End Type="InvoiceWebsiteModel.SystemUser" Role="SystemUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SystemUser">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="InvoiceWebsiteModelStoreContainer" CdmEntityContainer="InvoiceEntities">
+          <EntitySetMapping Name="Casing">
+            <EntityTypeMapping TypeName="InvoiceWebsiteModel.Casing">
+              <MappingFragment StoreEntitySet="Casing">
+                <ScalarProperty Name="cash" ColumnName="cash" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CasingTransaction">
+            <EntityTypeMapping TypeName="InvoiceWebsiteModel.CasingTransaction">
+              <MappingFragment StoreEntitySet="CasingTransaction">
+                <ScalarProperty Name="Paid" ColumnName="Paid" />
+                <ScalarProperty Name="Create_At" ColumnName="Create_At" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="TransactionType" ColumnName="TransactionType" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Companies">
+            <EntityTypeMapping TypeName="InvoiceWebsiteModel.Companies">
+              <MappingFragment StoreEntitySet="Companies">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DeleteDate" ColumnName="DeleteDate" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CompanyType" ColumnName="CompanyType" />
+                <ScalarProperty Name="CompanyAddress" ColumnName="CompanyAddress" />
+                <ScalarProperty Name="CompanyEmail" ColumnName="CompanyEmail" />
+                <ScalarProperty Name="CompanyTelNo" ColumnName="CompanyTelNo" />
+                <ScalarProperty Name="CompanyDescription" ColumnName="CompanyDescription" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CompanyTransactions">
+            <EntityTypeMapping TypeName="InvoiceWebsiteModel.CompanyTransactions">
+              <MappingFragment StoreEntitySet="CompanyTransactions">
+                <ScalarProperty Name="Cash" ColumnName="Cash" />
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Invoices">
+            <EntityTypeMapping TypeName="InvoiceWebsiteModel.Invoices">
+              <MappingFragment StoreEntitySet="Invoices">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DeleteDate" ColumnName="DeleteDate" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="Create_At" ColumnName="Create_At" />
+                <ScalarProperty Name="Paid" ColumnName="Paid" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="InvoiceType" ColumnName="InvoiceType" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OfficialInvoices">
+            <EntityTypeMapping TypeName="InvoiceWebsiteModel.OfficialInvoices">
+              <MappingFragment StoreEntitySet="OfficialInvoices">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DeleteDate" ColumnName="DeleteDate" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="entry_printout" ColumnName="entry_printout" />
+                <ScalarProperty Name="Create_At" ColumnName="Create_At" />
+                <ScalarProperty Name="Paid" ColumnName="Paid" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+                <ScalarProperty Name="WaybillNo" ColumnName="WaybillNo" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="InvoiceWebsiteModel.Products">
+              <MappingFragment StoreEntitySet="Products">
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="InvoiceWebsiteModel.Roles">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SystemUser">
+            <EntityTypeMapping TypeName="InvoiceWebsiteModel.SystemUser">
+              <MappingFragment StoreEntitySet="SystemUser">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Delete_Date" ColumnName="Delete_Date" />
+                <ScalarProperty Name="Update_Date" ColumnName="Update_Date" />
+                <ScalarProperty Name="Create_Date" ColumnName="Create_Date" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

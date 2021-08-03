@@ -1,0 +1,99 @@
+﻿@model Companies
+@{
+    ViewBag.Title = "EntryAdd";
+}
+
+<div class="card p-3">
+    <h2>Resmi Fatura Girdisi</h2>
+    <h3 class="text-end"> @DateTime.Now</h3>
+    <form>
+        <div class="mb-3">
+            <label for="WaybillNo" class="form-label">İrsaliye No</label>
+            <input type="text" class="form-control" id="WaybillNo" placeholder="" required />
+        </div>
+        <div class="mb-3">
+            <label for="InvoiceNo" class="form-label">Fatura No</label>
+            <input type="text" class="form-control" id="InvoiceNo" />
+        </div>
+        <div class="mb-3">
+            <label for="Amount" class="form-label">Tutar</label>
+            <input type="text" class="form-control" id="Amount" placeholder="1500,50" />
+        </div>
+        <div class="mb-3">
+            <label for="Desc" class="form-label">Açıklama</label>
+            <textarea class="form-control" id="Desc" rows="2"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="Paid" class="form-label">Ödenen Tutar</label>
+            <input type="text" class="form-control" id="Paid" placeholder="" />
+        </div>
+
+        <div class="mb-3">
+            <button class="btn btn-primary btn-circle px-2 animate-right-1" type="button" id="add_button" data-company-id="@Model.ID">Resmi Fatura Ekle</button>
+        </div>
+
+    </form>
+</div>
+@section Css{
+    <link rel="stylesheet" href="~/Content/vendor/izitoast/css/iziToast.min.css">
+}
+@section scripts{
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="~/Content/vendor/izitoast/js/iziToast.min.js"></script>
+    <script>
+
+        $("#add_button").click(function () {
+            var $waybillno = $("#WaybillNo").val();
+            var $invoiceno = $("#InvoiceNo").val();
+            var $amount = $("#Amount").val();
+            var $desc = $("#Desc").val();
+            var $paid = $("#Paid").val();
+            var formdata = new FormData();
+            formdata.append("waybillno", $waybillno);
+            formdata.append("invoiceno", $invoiceno);
+            formdata.append("amount", $amount);
+            formdata.append("desc", $desc);
+            formdata.append("paid", $paid);
+            formdata.append("entrydata", 1);
+            formdata.append("companyid", $(this).data("company-id"))
+            $.ajax({
+                url: "/OfficialInvoice/Add",
+                type: "POST",
+                data: formdata,
+                contentType: false,
+                processData: false,
+                beforeSend: false,
+                complete: false,
+                success: function (data) {
+                    if (data != "Failed") {
+                        iziToast.success({
+                            title: "Başarılı",
+                            message: "Resmi Fatura Başarılı Bir Şekilde Eklendi.",
+                            position: "topCenter"
+                        })
+                        setTimeout(function () {
+                            document.location="/OfficialInvoice/Index";
+                        },1000)
+                    }
+                    else {
+                        console.log("abc")
+                        iziToast.error({
+                            title: "Hata",
+                            message: "Ekleme Başarısız Oldu",
+                            position:"topCenter"
+                        })
+                    }
+                },
+                error: function () {
+                    iziToast.error({
+                        title: "Hata",
+                        message: "Ekleme Başarısız Oldu",
+                        position: "topCenter"
+                    })
+                }
+            })
+        });
+
+
+    </script>
+}  

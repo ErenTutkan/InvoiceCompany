@@ -1,0 +1,127 @@
+﻿@model DatabaseFunction.Model.InvoiceProductsModel
+@{ 
+    ViewBag.Title = "Güncelle";
+    var products = Model.products;
+    var invoice = Model.invoice;
+}
+
+<div class="card p-3">
+    <h2>Resmi Fatura Girdisi</h2>
+    <h3 class="text-end"> @DateTime.Now</h3>
+    <form>
+        <div class="mb-3">
+            <select id="product" class="form-control">
+                <option value=""> Seçiniz</option>
+                @foreach (var item in products)
+                {
+                    if (invoice.ProductId == item.ID)
+                    {
+                        <option selected value="@item.ID">@item.ProductName</option>
+                    }
+                    else
+                    {
+                        <option value="@item.ID">@item.ProductName</option>
+                    }
+
+                }
+
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="Weight" class="form-label">Ürün Ağırlığı</label>
+            <input type="text" class="form-control" id="Weight" value="@invoice.Weight" />
+        </div>
+        <div class="mb-3">
+            <label for="UnitPrice" class="form-label">Birim Fiyatı</label>
+            <input type="text" class="form-control" id="UnitPrice" placeholder="12.3" value="@invoice.UnitPrice" />
+            <button type="button" class="btn btn-primary btn-sm mt-2" id="calculate">Hesapla</button>
+        </div>
+        <div class="mb-3">
+            <label for="Amount" class="form-label">Toplam Tutar</label>
+            <input type="text" class="form-control" id="Amount" value="@invoice.Amount" disabled placeholder="" />
+        </div>
+        <div class="mb-3">
+            <label for="Desc" class="form-label">Açıklama</label>
+            <textarea class="form-control" id="Desc" rows="2" >@invoice.Description</textarea>
+        </div>
+        <div class="mb-3">
+            <label for="Paid" class="form-label">Ödenen Tutar</label>
+            <input type="text" class="form-control" id="Paid" placeholder="" value="@invoice.Paid" />
+        </div>
+
+        <div class="mb-3">
+            <button class="btn btn-primary btn-circle px-2 animate-right-1" type="button" id="add_button" data-invoice-id="@invoice.ID">Güncelle</button>
+        </div>
+
+    </form>
+</div>
+@section Css{
+    <link rel="stylesheet" href="~/Content/vendor/izitoast/css/iziToast.min.css">
+}
+@section scripts{
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="~/Content/vendor/izitoast/js/iziToast.min.js"></script>
+    <script>
+        $("#calculate").click(function () {
+            var $weight = $("#Weight").val();
+            var $unitprice = $("#UnitPrice").val();
+            var $amount = $("#Amount").val($weight * $unitprice);
+        })
+        $("#add_button").click(function () {
+            $productid = $("#product").val();
+            var $weight = $("#Weight").val();
+            var $unitprice = $("#UnitPrice").val();
+            var $amount = $("#Amount").val();
+            var $desc = $("#Desc").val();
+            var $paid = $("#Paid").val();
+            var formdata = new FormData();
+            formdata.append("id", $(this).data("invoice-id"))
+            formdata.append("productid", $productid);
+            formdata.append("weight", $weight);
+            formdata.append("unitprice", $unitprice);
+            formdata.append("amount", $amount);
+            formdata.append("desc", $desc);
+            formdata.append("paid", $paid);
+            
+            
+            $.ajax({
+                url: "/Invoice/Update",
+                type: "POST",
+                data: formdata,
+                contentType: false,
+                processData: false,
+                beforeSend: false,
+                complete: false,
+                success: function (data) {
+                    if (data != "Failed") {
+                        iziToast.success({
+                            title: "Başarılı",
+                            message: " Fatura Başarılı Bir Şekilde Güncellendi.",
+                            position: "topCenter"
+                        })
+                        setTimeout(function () {
+                            document.location="/Invoice/Index";
+                        },1000)
+                    }
+                    else {
+                        console.log("abc")
+                        iziToast.error({
+                            title: "Hata",
+                            message: "Güncelleme Başarısız Oldu",
+                            position:"topCenter"
+                        })
+                    }
+                },
+                error: function () {
+                    iziToast.error({
+                        title: "Hata",
+                        message: "Güncelleme Başarısız Oldu",
+                        position: "topCenter"
+                    })
+                }
+            })
+        });
+
+
+    </script>
+}  

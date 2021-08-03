@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="fd304c151d5a4795b3d32fe288d601aa" Name="Diagram1">
+        <EntityTypeShape EntityType="InvoiceWebsiteModel.Casing" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="InvoiceWebsiteModel.CasingTransaction" Width="1.5" PointX="5.25" PointY="16.625" />
+        <EntityTypeShape EntityType="InvoiceWebsiteModel.Companies" Width="1.5" PointX="3" PointY="11.125" />
+        <EntityTypeShape EntityType="InvoiceWebsiteModel.CompanyTransactions" Width="1.5" PointX="5.25" PointY="12" />
+        <EntityTypeShape EntityType="InvoiceWebsiteModel.Invoices" Width="1.5" PointX="5.25" PointY="5.5" />
+        <EntityTypeShape EntityType="InvoiceWebsiteModel.OfficialInvoices" Width="1.5" PointX="8.25" PointY="5.75" />
+        <EntityTypeShape EntityType="InvoiceWebsiteModel.Products" Width="1.5" PointX="3" PointY="3.75" />
+        <EntityTypeShape EntityType="InvoiceWebsiteModel.Roles" Width="1.5" PointX="0.75" PointY="7" />
+        <EntityTypeShape EntityType="InvoiceWebsiteModel.SystemUser" Width="1.5" PointX="3" PointY="6.125" />
+        <AssociationConnector Association="InvoiceWebsiteModel.FK_CasingTransaction_CasingTransaction" />
+        <AssociationConnector Association="InvoiceWebsiteModel.FK_CompanyTransactions_Companies" />
+        <AssociationConnector Association="InvoiceWebsiteModel.FK_Invoices_Companies" />
+        <AssociationConnector Association="InvoiceWebsiteModel.FK_OfficialInvoice_Companies" />
+        <AssociationConnector Association="InvoiceWebsiteModel.FK_Invoices_Product" />
+        <AssociationConnector Association="InvoiceWebsiteModel.FK_Invoices_SystemUser" />
+        <AssociationConnector Association="InvoiceWebsiteModel.FK_OfficialInvoice_SystemUser" />
+        <AssociationConnector Association="InvoiceWebsiteModel.FK_SystemUser_Roles" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

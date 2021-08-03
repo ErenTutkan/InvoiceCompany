@@ -1,0 +1,75 @@
+﻿@model SystemUser
+@{
+    ViewBag.Title = "Kullanıcı Detayları";
+}
+
+<div class="card">
+    <div class="card-body">
+        <form>
+            <div class="mb-3">
+                <label for="username" class="form-label">Kullanıcı Adı</label>
+                <input type="text" class="form-control" id="username" disabled value="@Model.Username" required />
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Şifre</label>
+                <input type="password" class="form-control" id="password"  required />
+            </div>
+            <div class="mb-3">
+                <button type="button" class="btn btn-primary" id="register_button" data-user-id="@Model.ID">Kayıt Et</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+@section Css{
+    <link rel="stylesheet" href="~/Content/vendor/izitoast/css/iziToast.min.css">
+}
+@section scripts{
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="~/Content/vendor/izitoast/js/iziToast.min.js"></script>
+    <script>
+        $("#register_button").click(function () {
+            var userid = $(this).data("user-id");
+            var password = $("#password").val();
+            var formdata = new FormData();
+            formdata.append("userid", userid)
+            formdata.append("password", password);
+            $.ajax({
+                url: "/User/Update",
+                type: "POST",
+                data: formdata,
+                contentType: false,
+                processData: false,
+                beforeSend: false,
+                complete: false,
+                success: function (data) {
+                    if (data != "Failed") {
+                        iziToast.success({
+                            title: "Başarılı",
+                            message: "Kullanıcı Başarılı Bir Şekilde Güncellendi.",
+                            position: "topCenter"
+                        })
+                        setTimeout(function () {
+                            document.location = "/User/Index";
+                        }, 1000)
+                    }
+                    else {
+                        iziToast.error({
+                            title: "Hata",
+                            message: "Kullanıcı Güncelleme Başarısız Oldu.",
+                            position: "topCenter"
+                        })
+                    }
+                },
+                    error: function() {
+                        iziToast.error({
+                            title: "Hata",
+                            message: "Kullanıcı Güncelleme Başarısız Oldu.",
+                            position: "topCenter"
+                        })
+                    }
+                
+            })
+        });
+    </script>
+}

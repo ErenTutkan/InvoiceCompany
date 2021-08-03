@@ -1,0 +1,253 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="InvoiceWebsiteModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Casing">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Date" Type="date" />
+    <Property Name="cash" Type="float" />
+  </EntityType>
+  <EntityType Name="CasingTransaction">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Date" Type="datetime" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="TransactionType" Type="int" />
+    <Property Name="Description" Type="text" />
+    <Property Name="Create_At" Type="int" />
+    <Property Name="Paid" Type="float" />
+  </EntityType>
+  <EntityType Name="Companies">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CompanyName" Type="nvarchar" MaxLength="50" />
+    <Property Name="CompanyDescription" Type="nvarchar" MaxLength="300" />
+    <Property Name="CompanyTelNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="CompanyEmail" Type="nvarchar" MaxLength="150" />
+    <Property Name="CompanyAddress" Type="nvarchar" MaxLength="350" />
+    <Property Name="CompanyType" Type="int" />
+    <Property Name="CreateDate" Type="datetime" />
+    <Property Name="UpdateDate" Type="datetime" />
+    <Property Name="DeleteDate" Type="datetime" />
+    <Property Name="Status" Type="int" />
+  </EntityType>
+  <EntityType Name="CompanyTransactions">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Date" Type="datetime" />
+    <Property Name="CompanyID" Type="int" />
+    <Property Name="Cash" Type="float" />
+  </EntityType>
+  <EntityType Name="Invoices">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Date" Type="datetime" />
+    <Property Name="CompanyID" Type="int" />
+    <Property Name="ProductId" Type="int" />
+    <Property Name="InvoiceType" Type="int" />
+    <Property Name="Weight" Type="float" />
+    <Property Name="UnitPrice" Type="float" />
+    <Property Name="Amount" Type="float" />
+    <Property Name="Description" Type="text" />
+    <Property Name="Paid" Type="float" />
+    <Property Name="Create_At" Type="int" />
+    <Property Name="CreateDate" Type="datetime" />
+    <Property Name="UpdateDate" Type="datetime" />
+    <Property Name="DeleteDate" Type="datetime" />
+    <Property Name="Status" Type="int" />
+  </EntityType>
+  <EntityType Name="OfficialInvoices">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CompanyID" Type="int" />
+    <Property Name="Date" Type="datetime" />
+    <Property Name="WaybillNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="InvoiceNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="Amount" Type="float" />
+    <Property Name="Description" Type="nvarchar" MaxLength="500" />
+    <Property Name="Paid" Type="float" />
+    <Property Name="Create_At" Type="int" />
+    <Property Name="entry_printout" Type="int" />
+    <Property Name="CreateDate" Type="datetime" />
+    <Property Name="UpdateDate" Type="datetime" />
+    <Property Name="DeleteDate" Type="datetime" />
+    <Property Name="Status" Type="int" />
+  </EntityType>
+  <EntityType Name="Products">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ProductName" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Roles">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RoleName" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="SystemUser">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Username" Type="nvarchar" MaxLength="50" />
+    <Property Name="Password" Type="nvarchar" MaxLength="150" />
+    <Property Name="RoleID" Type="int" />
+    <Property Name="Create_Date" Type="datetime" />
+    <Property Name="Update_Date" Type="datetime" />
+    <Property Name="Delete_Date" Type="datetime" />
+    <Property Name="Status" Type="int" />
+  </EntityType>
+  <Association Name="FK_CasingTransaction_CasingTransaction">
+    <End Role="SystemUser" Type="Self.SystemUser" Multiplicity="0..1" />
+    <End Role="CasingTransaction" Type="Self.CasingTransaction" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SystemUser">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="CasingTransaction">
+        <PropertyRef Name="Create_At" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CompanyTransactions_Companies">
+    <End Role="Companies" Type="Self.Companies" Multiplicity="0..1" />
+    <End Role="CompanyTransactions" Type="Self.CompanyTransactions" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Companies">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="CompanyTransactions">
+        <PropertyRef Name="CompanyID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Invoices_Companies">
+    <End Role="Companies" Type="Self.Companies" Multiplicity="0..1" />
+    <End Role="Invoices" Type="Self.Invoices" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Companies">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Invoices">
+        <PropertyRef Name="CompanyID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Invoices_Product">
+    <End Role="Products" Type="Self.Products" Multiplicity="0..1" />
+    <End Role="Invoices" Type="Self.Invoices" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Invoices">
+        <PropertyRef Name="ProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Invoices_SystemUser">
+    <End Role="SystemUser" Type="Self.SystemUser" Multiplicity="0..1" />
+    <End Role="Invoices" Type="Self.Invoices" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SystemUser">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Invoices">
+        <PropertyRef Name="Create_At" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OfficialInvoice_Companies">
+    <End Role="Companies" Type="Self.Companies" Multiplicity="0..1" />
+    <End Role="OfficialInvoices" Type="Self.OfficialInvoices" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Companies">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="OfficialInvoices">
+        <PropertyRef Name="CompanyID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OfficialInvoice_SystemUser">
+    <End Role="SystemUser" Type="Self.SystemUser" Multiplicity="0..1" />
+    <End Role="OfficialInvoices" Type="Self.OfficialInvoices" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SystemUser">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="OfficialInvoices">
+        <PropertyRef Name="Create_At" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SystemUser_Roles">
+    <End Role="Roles" Type="Self.Roles" Multiplicity="0..1" />
+    <End Role="SystemUser" Type="Self.SystemUser" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Roles">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="SystemUser">
+        <PropertyRef Name="RoleID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="InvoiceWebsiteModelStoreContainer">
+    <EntitySet Name="Casing" EntityType="Self.Casing" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CasingTransaction" EntityType="Self.CasingTransaction" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Companies" EntityType="Self.Companies" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CompanyTransactions" EntityType="Self.CompanyTransactions" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Invoices" EntityType="Self.Invoices" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="OfficialInvoices" EntityType="Self.OfficialInvoices" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SystemUser" EntityType="Self.SystemUser" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_CasingTransaction_CasingTransaction" Association="Self.FK_CasingTransaction_CasingTransaction">
+      <End Role="SystemUser" EntitySet="SystemUser" />
+      <End Role="CasingTransaction" EntitySet="CasingTransaction" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CompanyTransactions_Companies" Association="Self.FK_CompanyTransactions_Companies">
+      <End Role="Companies" EntitySet="Companies" />
+      <End Role="CompanyTransactions" EntitySet="CompanyTransactions" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Invoices_Companies" Association="Self.FK_Invoices_Companies">
+      <End Role="Companies" EntitySet="Companies" />
+      <End Role="Invoices" EntitySet="Invoices" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Invoices_Product" Association="Self.FK_Invoices_Product">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="Invoices" EntitySet="Invoices" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Invoices_SystemUser" Association="Self.FK_Invoices_SystemUser">
+      <End Role="SystemUser" EntitySet="SystemUser" />
+      <End Role="Invoices" EntitySet="Invoices" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OfficialInvoice_Companies" Association="Self.FK_OfficialInvoice_Companies">
+      <End Role="Companies" EntitySet="Companies" />
+      <End Role="OfficialInvoices" EntitySet="OfficialInvoices" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OfficialInvoice_SystemUser" Association="Self.FK_OfficialInvoice_SystemUser">
+      <End Role="SystemUser" EntitySet="SystemUser" />
+      <End Role="OfficialInvoices" EntitySet="OfficialInvoices" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SystemUser_Roles" Association="Self.FK_SystemUser_Roles">
+      <End Role="Roles" EntitySet="Roles" />
+      <End Role="SystemUser" EntitySet="SystemUser" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

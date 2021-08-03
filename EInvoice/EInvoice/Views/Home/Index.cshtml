@@ -1,0 +1,51 @@
+﻿@model DatabaseFunction.Model.CasingModel
+@{
+    var casing = Model.casing;
+    var casings = Model.casings;
+    ViewBag.Title = "Home Page";
+}
+
+<div class="card mt-2" style="width:18rem;">
+    
+    <div class="card-body">
+        <h5 class="card-title">Kasa</h5>
+        <h6 class="card-subtitle">@DateTime.Now.Date.ToString("dd/MM/yyyy")</h6>
+        <p class="card-text fw-bold">@casing </p>
+        
+    </div>
+    
+</div>
+<div class="card mt-2">
+    <div class="card-body">
+        @if (casings == null)
+        {
+            <span>Bilgi Bulunamadı.</span>
+        }
+        else
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Tarih</th>
+                        <th scope="col">Kasa</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in casings)
+                    {
+                        <tr>
+                            <th scope="row">@item.ID</th>
+                            <td>@item.Date</td>
+                            <td>@item.cash</td>
+
+                        </tr>
+
+                    }
+
+                </tbody>
+            </table>
+        }
+    </div>
+</div>

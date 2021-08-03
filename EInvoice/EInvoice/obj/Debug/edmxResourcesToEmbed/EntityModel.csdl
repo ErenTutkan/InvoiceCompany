@@ -1,0 +1,269 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="InvoiceWebsiteModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="InvoiceEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Casing" EntityType="InvoiceWebsiteModel.Casing" />
+    <EntitySet Name="CasingTransaction" EntityType="InvoiceWebsiteModel.CasingTransaction" />
+    <EntitySet Name="Companies" EntityType="InvoiceWebsiteModel.Companies" />
+    <EntitySet Name="CompanyTransactions" EntityType="InvoiceWebsiteModel.CompanyTransactions" />
+    <EntitySet Name="Invoices" EntityType="InvoiceWebsiteModel.Invoices" />
+    <EntitySet Name="OfficialInvoices" EntityType="InvoiceWebsiteModel.OfficialInvoices" />
+    <EntitySet Name="Products" EntityType="InvoiceWebsiteModel.Products" />
+    <EntitySet Name="Roles" EntityType="InvoiceWebsiteModel.Roles" />
+    <EntitySet Name="SystemUser" EntityType="InvoiceWebsiteModel.SystemUser" />
+    <AssociationSet Name="FK_CasingTransaction_CasingTransaction" Association="InvoiceWebsiteModel.FK_CasingTransaction_CasingTransaction">
+      <End Role="SystemUser" EntitySet="SystemUser" />
+      <End Role="CasingTransaction" EntitySet="CasingTransaction" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CompanyTransactions_Companies" Association="InvoiceWebsiteModel.FK_CompanyTransactions_Companies">
+      <End Role="Companies" EntitySet="Companies" />
+      <End Role="CompanyTransactions" EntitySet="CompanyTransactions" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Invoices_Companies" Association="InvoiceWebsiteModel.FK_Invoices_Companies">
+      <End Role="Companies" EntitySet="Companies" />
+      <End Role="Invoices" EntitySet="Invoices" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OfficialInvoice_Companies" Association="InvoiceWebsiteModel.FK_OfficialInvoice_Companies">
+      <End Role="Companies" EntitySet="Companies" />
+      <End Role="OfficialInvoices" EntitySet="OfficialInvoices" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Invoices_Product" Association="InvoiceWebsiteModel.FK_Invoices_Product">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="Invoices" EntitySet="Invoices" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Invoices_SystemUser" Association="InvoiceWebsiteModel.FK_Invoices_SystemUser">
+      <End Role="SystemUser" EntitySet="SystemUser" />
+      <End Role="Invoices" EntitySet="Invoices" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OfficialInvoice_SystemUser" Association="InvoiceWebsiteModel.FK_OfficialInvoice_SystemUser">
+      <End Role="SystemUser" EntitySet="SystemUser" />
+      <End Role="OfficialInvoices" EntitySet="OfficialInvoices" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SystemUser_Roles" Association="InvoiceWebsiteModel.FK_SystemUser_Roles">
+      <End Role="Roles" EntitySet="Roles" />
+      <End Role="SystemUser" EntitySet="SystemUser" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Casing">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Date" Type="DateTime" Precision="0" />
+    <Property Name="cash" Type="Double" />
+  </EntityType>
+  <EntityType Name="CasingTransaction">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Date" Type="DateTime" Precision="3" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="TransactionType" Type="Int32" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Create_At" Type="Int32" />
+    <Property Name="Paid" Type="Double" />
+    <NavigationProperty Name="SystemUser" Relationship="InvoiceWebsiteModel.FK_CasingTransaction_CasingTransaction" FromRole="CasingTransaction" ToRole="SystemUser" />
+  </EntityType>
+  <EntityType Name="Companies">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CompanyName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CompanyDescription" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="CompanyTelNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CompanyEmail" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+    <Property Name="CompanyAddress" Type="String" MaxLength="350" FixedLength="false" Unicode="true" />
+    <Property Name="CompanyType" Type="Int32" />
+    <Property Name="CreateDate" Type="DateTime" Precision="3" />
+    <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+    <Property Name="DeleteDate" Type="DateTime" Precision="3" />
+    <Property Name="Status" Type="Int32" />
+    <NavigationProperty Name="CompanyTransactions" Relationship="InvoiceWebsiteModel.FK_CompanyTransactions_Companies" FromRole="Companies" ToRole="CompanyTransactions" />
+    <NavigationProperty Name="Invoices" Relationship="InvoiceWebsiteModel.FK_Invoices_Companies" FromRole="Companies" ToRole="Invoices" />
+    <NavigationProperty Name="OfficialInvoices" Relationship="InvoiceWebsiteModel.FK_OfficialInvoice_Companies" FromRole="Companies" ToRole="OfficialInvoices" />
+  </EntityType>
+  <EntityType Name="CompanyTransactions">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Date" Type="DateTime" Precision="3" />
+    <Property Name="CompanyID" Type="Int32" />
+    <Property Name="Cash" Type="Double" />
+    <NavigationProperty Name="Companies" Relationship="InvoiceWebsiteModel.FK_CompanyTransactions_Companies" FromRole="CompanyTransactions" ToRole="Companies" />
+  </EntityType>
+  <EntityType Name="Invoices">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Date" Type="DateTime" Precision="3" />
+    <Property Name="CompanyID" Type="Int32" />
+    <Property Name="ProductId" Type="Int32" />
+    <Property Name="InvoiceType" Type="Int32" />
+    <Property Name="Weight" Type="Double" />
+    <Property Name="UnitPrice" Type="Double" />
+    <Property Name="Amount" Type="Double" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Paid" Type="Double" />
+    <Property Name="Create_At" Type="Int32" />
+    <Property Name="CreateDate" Type="DateTime" Precision="3" />
+    <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+    <Property Name="DeleteDate" Type="DateTime" Precision="3" />
+    <Property Name="Status" Type="Int32" />
+    <NavigationProperty Name="Companies" Relationship="InvoiceWebsiteModel.FK_Invoices_Companies" FromRole="Invoices" ToRole="Companies" />
+    <NavigationProperty Name="Products" Relationship="InvoiceWebsiteModel.FK_Invoices_Product" FromRole="Invoices" ToRole="Products" />
+    <NavigationProperty Name="SystemUser" Relationship="InvoiceWebsiteModel.FK_Invoices_SystemUser" FromRole="Invoices" ToRole="SystemUser" />
+  </EntityType>
+  <EntityType Name="OfficialInvoices">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CompanyID" Type="Int32" />
+    <Property Name="Date" Type="DateTime" Precision="3" />
+    <Property Name="WaybillNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="InvoiceNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Amount" Type="Double" />
+    <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="Paid" Type="Double" />
+    <Property Name="Create_At" Type="Int32" />
+    <Property Name="entry_printout" Type="Int32" />
+    <Property Name="CreateDate" Type="DateTime" Precision="3" />
+    <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+    <Property Name="DeleteDate" Type="DateTime" Precision="3" />
+    <Property Name="Status" Type="Int32" />
+    <NavigationProperty Name="Companies" Relationship="InvoiceWebsiteModel.FK_OfficialInvoice_Companies" FromRole="OfficialInvoices" ToRole="Companies" />
+    <NavigationProperty Name="SystemUser" Relationship="InvoiceWebsiteModel.FK_OfficialInvoice_SystemUser" FromRole="OfficialInvoices" ToRole="SystemUser" />
+  </EntityType>
+  <EntityType Name="Products">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProductName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Invoices" Relationship="InvoiceWebsiteModel.FK_Invoices_Product" FromRole="Products" ToRole="Invoices" />
+  </EntityType>
+  <EntityType Name="Roles">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RoleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="SystemUser" Relationship="InvoiceWebsiteModel.FK_SystemUser_Roles" FromRole="Roles" ToRole="SystemUser" />
+  </EntityType>
+  <EntityType Name="SystemUser">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Password" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+    <Property Name="RoleID" Type="Int32" />
+    <Property Name="Create_Date" Type="DateTime" Precision="3" />
+    <Property Name="Update_Date" Type="DateTime" Precision="3" />
+    <Property Name="Delete_Date" Type="DateTime" Precision="3" />
+    <Property Name="Status" Type="Int32" />
+    <NavigationProperty Name="CasingTransaction" Relationship="InvoiceWebsiteModel.FK_CasingTransaction_CasingTransaction" FromRole="SystemUser" ToRole="CasingTransaction" />
+    <NavigationProperty Name="Invoices" Relationship="InvoiceWebsiteModel.FK_Invoices_SystemUser" FromRole="SystemUser" ToRole="Invoices" />
+    <NavigationProperty Name="OfficialInvoices" Relationship="InvoiceWebsiteModel.FK_OfficialInvoice_SystemUser" FromRole="SystemUser" ToRole="OfficialInvoices" />
+    <NavigationProperty Name="Roles" Relationship="InvoiceWebsiteModel.FK_SystemUser_Roles" FromRole="SystemUser" ToRole="Roles" />
+  </EntityType>
+  <Association Name="FK_CasingTransaction_CasingTransaction">
+    <End Type="InvoiceWebsiteModel.SystemUser" Role="SystemUser" Multiplicity="0..1" />
+    <End Type="InvoiceWebsiteModel.CasingTransaction" Role="CasingTransaction" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SystemUser">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="CasingTransaction">
+        <PropertyRef Name="Create_At" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CompanyTransactions_Companies">
+    <End Type="InvoiceWebsiteModel.Companies" Role="Companies" Multiplicity="0..1" />
+    <End Type="InvoiceWebsiteModel.CompanyTransactions" Role="CompanyTransactions" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Companies">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="CompanyTransactions">
+        <PropertyRef Name="CompanyID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Invoices_Companies">
+    <End Type="InvoiceWebsiteModel.Companies" Role="Companies" Multiplicity="0..1" />
+    <End Type="InvoiceWebsiteModel.Invoices" Role="Invoices" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Companies">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Invoices">
+        <PropertyRef Name="CompanyID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OfficialInvoice_Companies">
+    <End Type="InvoiceWebsiteModel.Companies" Role="Companies" Multiplicity="0..1" />
+    <End Type="InvoiceWebsiteModel.OfficialInvoices" Role="OfficialInvoices" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Companies">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="OfficialInvoices">
+        <PropertyRef Name="CompanyID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Invoices_Product">
+    <End Type="InvoiceWebsiteModel.Products" Role="Products" Multiplicity="0..1" />
+    <End Type="InvoiceWebsiteModel.Invoices" Role="Invoices" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Invoices">
+        <PropertyRef Name="ProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Invoices_SystemUser">
+    <End Type="InvoiceWebsiteModel.SystemUser" Role="SystemUser" Multiplicity="0..1" />
+    <End Type="InvoiceWebsiteModel.Invoices" Role="Invoices" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SystemUser">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Invoices">
+        <PropertyRef Name="Create_At" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OfficialInvoice_SystemUser">
+    <End Type="InvoiceWebsiteModel.SystemUser" Role="SystemUser" Multiplicity="0..1" />
+    <End Type="InvoiceWebsiteModel.OfficialInvoices" Role="OfficialInvoices" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SystemUser">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="OfficialInvoices">
+        <PropertyRef Name="Create_At" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SystemUser_Roles">
+    <End Type="InvoiceWebsiteModel.Roles" Role="Roles" Multiplicity="0..1" />
+    <End Type="InvoiceWebsiteModel.SystemUser" Role="SystemUser" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Roles">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="SystemUser">
+        <PropertyRef Name="RoleID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
