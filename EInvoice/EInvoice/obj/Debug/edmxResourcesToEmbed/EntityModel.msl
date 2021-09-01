@@ -94,6 +94,7 @@
     <EntitySetMapping Name="Products">
       <EntityTypeMapping TypeName="InvoiceWebsiteModel.Products">
         <MappingFragment StoreEntitySet="Products">
+          <ScalarProperty Name="Stock" ColumnName="Stock" />
           <ScalarProperty Name="ProductName" ColumnName="ProductName" />
           <ScalarProperty Name="ID" ColumnName="ID" />
         </MappingFragment>

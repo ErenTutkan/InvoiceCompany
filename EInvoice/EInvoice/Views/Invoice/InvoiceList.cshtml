@@ -9,6 +9,7 @@
         <table id="table" data-order='[[ 0, "desc" ]]' class="table table-striped " style="width:100%">
             <thead>
                 <tr>
+                    <th>ID</th>
                     <th>Tarih</th>
                     <th>Ürün Adı</th>
                     <th>Kilogram</th>
@@ -23,21 +24,27 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                    <tr>
-                        <td>@item.Date</td>
-                        <td>@item.Products.ProductName</td>
-                        <td>@item.Weight</td>
-                        <td>@item.UnitPrice</td>
-                        <td>@item.Amount</td>
-                        <td>@item.Paid</td>
-                        <td>
-                            @if (item.InvoiceType == 1)
-                            {<span class="text-success">Girdi</span>
-                            }
-                            else
-                            {
-                                <span class="text-danger">Çıktı</span>
-                            }
+                <tr>
+                    @{
+                        DateTime datetime = (DateTime)item.Date;
+                        var itemdate = datetime.ToString("HH:mm:ss dd:MM:yyyy");
+
+                    }
+                    <td>@item.ID</td>
+                    <td>@itemdate</td>
+                    <td>@item.Products.ProductName</td>
+                    <td>@item.Weight</td>
+                    <td>@item.UnitPrice</td>
+                    <td>@item.Amount</td>
+                    <td>@item.Paid</td>
+                    <td>
+                        @if (item.InvoiceType == 1)
+                        {<span class="text-success">Girdi</span>
+                        }
+                        else
+                        {
+                            <span class="text-danger">Çıktı</span>
+                        }
                     </td>
                     <td>
                         <a class="btn btn-primary my-2" href="/Invoice/Update">Güncelle</a>

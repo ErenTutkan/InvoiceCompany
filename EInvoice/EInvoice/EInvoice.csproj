@@ -516,6 +516,8 @@
     <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Views\OfficialInvoice\Detail.cshtml" />
     <Content Include="Views\Invoice\Detail.cshtml" />
+    <Content Include="Views\Product\StockAdd.cshtml" />
+    <Content Include="Views\Product\StockTake.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

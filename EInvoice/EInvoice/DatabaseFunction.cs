@@ -202,7 +202,9 @@ namespace EInvoice
                 {
                     using(InvoiceEntities entity=new InvoiceEntities())
                     {
-                        List<Casing> casings = entity.Casing.Where(x => x.Date >= DateTime.Today.AddDays(-30) && x.Date <= DateTime.Today.AddDays(-1)).OrderByDescending(x=>x.ID).ToList();
+                        var days30 = DateTime.Today.AddDays(-30);
+                        var days = DateTime.Today.AddDays(-1);
+                        List<Casing> casings = entity.Casing.Where(x => x.Date >= days30 && x.Date <= days).OrderByDescending(x=>x.ID).ToList();
                         return casings;
                     }
                 }
@@ -365,7 +367,8 @@ namespace EInvoice
                     {
                         var product = new Products()
                         {
-                            ProductName = productName
+                            ProductName = productName,
+                            Stock=0
                         };
                         entity.Products.Add(product);
                         entity.SaveChanges();
@@ -386,6 +389,24 @@ namespace EInvoice
                     {
                         var product = entity.Products.Where(x => x.ID == id).FirstOrDefault();
                         product.ProductName = productName;
+                        entity.SaveChanges();
+                        return true;
+                    }
+                }
+                catch (Exception)
+                {
+                    return false;
+                    throw;
+                }
+            }
+            public static bool StockUpdate(int id,float stock)
+            {
+                try
+                {
+                    using (InvoiceEntities entity=new InvoiceEntities())
+                    {
+                        var product = entity.Products.Where(x => x.ID == id).FirstOrDefault();
+                        product.Stock += stock;
                         entity.SaveChanges();
                         return true;
                     }

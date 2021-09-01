@@ -1,0 +1,77 @@
+﻿@model Products
+@{
+
+    ViewBag.Title = "Stokdan Al";
+}
+<div class="card p-3">
+    <h2>@Model.ProductName Stok Çıkart</h2>
+    <h3 class="text-end"> @DateTime.Now</h3>
+    <form>
+
+        <div class="mb-3">
+            <label for="Weight" class="form-label">Alınacak Miktar</label>
+            <input type="text" class="form-control" id="Weight" />
+        </div>
+
+        <div class="mb-3">
+            <button class="btn btn-primary btn-circle px-2 animate-right-1" type="button" id="add_button" data-product-id="@Model.ID">Stok Çıkart</button>
+        </div>
+    </form>
+</div>
+@section Css{
+    <link rel="stylesheet" href="~/Content/vendor/izitoast/css/iziToast.min.css">
+}
+@section scripts{
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="~/Content/vendor/izitoast/js/iziToast.min.js"></script>
+    <script>
+
+        $("#add_button").click(function () {
+
+            var $weight = $("#Weight").val();
+
+            var formdata = new FormData();
+            formdata.append("id", $(this).data("product-id"))
+            formdata.append("stock", -$weight);
+            $.ajax({
+                url: "/Product/StockUpdate",
+                type: "POST",
+                data: formdata,
+                contentType: false,
+                processData: false,
+                beforeSend: false,
+                complete: false,
+                success: function (data) {
+                    if (data != "Failed") {
+                        iziToast.success({
+                            title: "Başarılı",
+                            message: " Stok BaşarılıBir Şekilde Eklendi.",
+                            position: "topCenter"
+                        })
+                        setTimeout(function () {
+                            document.location="/Product/Index";
+                        },1000)
+                    }
+                    else {
+                        console.log("abc")
+                        iziToast.error({
+                            title: "Hata",
+                            message: "Ekleme Başarısız Oldu",
+                            position:"topCenter"
+                        })
+                    }
+                },
+                error: function () {
+                    iziToast.error({
+                        title: "Hata",
+                        message: "Ekleme Başarısız Oldu",
+                        position: "topCenter"
+                    })
+                }
+            })
+        });
+
+
+    </script>
+}
+

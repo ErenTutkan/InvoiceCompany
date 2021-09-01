@@ -22,6 +22,7 @@ namespace EInvoice
     
         public int ID { get; set; }
         public string ProductName { get; set; }
+        public Nullable<double> Stock { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Invoices> Invoices { get; set; }

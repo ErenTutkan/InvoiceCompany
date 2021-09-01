@@ -19,6 +19,17 @@ namespace EInvoice.Controllers
         {
             return View();
         }
+        public ActionResult StockAdd(int id)
+        {
+            var product = DatabaseFunction.Product.getProduct(id);
+            return View(product);
+        }
+        public ActionResult StockTake(int id)
+        {
+            var product = DatabaseFunction.Product.getProduct(id);
+            return View(product);
+        }
+        
         public ActionResult Detail(int id)
         {
             var product = DatabaseFunction.Product.getProduct(id);
@@ -68,6 +79,25 @@ namespace EInvoice.Controllers
             }
             return result;
         }
-
+        [HttpPost]
+        public string StockUpdate(int id,float stock)
+        {
+            try
+            {
+                if (DatabaseFunction.Product.StockUpdate(id, stock))
+                {
+                    return "Success";
+                }
+                else
+                {
+                    return "Failed";
+                }
+            }
+            catch (Exception)
+            {
+                return "Failed";
+                throw;
+            }
+        }
     }
 }

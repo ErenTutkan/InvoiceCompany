@@ -95,6 +95,7 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ProductName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Stock" Type="float" />
         </EntityType>
         <EntityType Name="Roles">
           <Key>
@@ -402,6 +403,7 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ProductName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Stock" Type="Double" />
           <NavigationProperty Name="Invoices" Relationship="InvoiceWebsiteModel.FK_Invoices_Product" FromRole="Products" ToRole="Invoices" />
         </EntityType>
         <EntityType Name="Roles">
@@ -624,6 +626,7 @@
           <EntitySetMapping Name="Products">
             <EntityTypeMapping TypeName="InvoiceWebsiteModel.Products">
               <MappingFragment StoreEntitySet="Products">
+                <ScalarProperty Name="Stock" ColumnName="Stock" />
                 <ScalarProperty Name="ProductName" ColumnName="ProductName" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>

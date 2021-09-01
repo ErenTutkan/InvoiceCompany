@@ -36,12 +36,16 @@ namespace EInvoice.Controllers
             {
                 var invoice = DatabaseFunction.Invoice.getDetail(id);
                 var totalamount = invoice.Amount - invoice.Paid;
+                var product = DatabaseFunction.Product.getProduct(productid);
+                var currentproductid = invoice.ProductId;
+                var currentproductstock = invoice.Weight;
                 if (DatabaseFunction.Invoice.Update(id, productid, weight, unitprice, amount, desc, paid))
                 {
                     result = "Succesfully";
                     
                     var cash = amount - paid;
                     var companyid = invoice.CompanyID;
+
                     if (invoice.InvoiceType == 1)
                     {
 
@@ -56,6 +60,25 @@ namespace EInvoice.Controllers
                             float trans = cash - (float)totalamount;
                             DatabaseFunction.CompanyTransaction.CreateTransaction((int)companyid, trans);
                         }
+                        if (currentproductid != productid)
+                        {
+                            DatabaseFunction.Product.StockUpdate((int)currentproductid, -(float)currentproductstock);
+                            DatabaseFunction.Product.StockUpdate(productid, weight);
+                        }
+                        else if(currentproductid==productid)
+                        {
+                            if (currentproductstock > weight)
+                            {
+                                float stockcount = (float)(currentproductstock - weight);
+                                DatabaseFunction.Product.StockUpdate(productid, -(float)stockcount);
+                            }
+                            else if (weight > currentproductstock)
+                            {
+                                float stock = (float)(weight - currentproductstock);
+                                DatabaseFunction.Product.StockUpdate(productid, stock);
+                            }
+                        }
+                       
                     }
                     else
                     {
@@ -69,7 +92,24 @@ namespace EInvoice.Controllers
                             float trans = (float)totalamount - cash;
                             DatabaseFunction.CompanyTransaction.CreateTransaction((int)companyid, trans);
                         }
-
+                        if (currentproductid != productid)
+                        {
+                            DatabaseFunction.Product.StockUpdate((int)currentproductid, (float)currentproductstock);
+                            DatabaseFunction.Product.StockUpdate(productid, -weight);
+                        }
+                        else if (currentproductid == productid)
+                        {
+                            if (currentproductstock > weight)
+                            {
+                                float stockcount = (float)(currentproductstock - weight);
+                                DatabaseFunction.Product.StockUpdate(productid, (float)stockcount);
+                            }
+                            else if (weight > currentproductstock)
+                            {
+                                float stock = (float)(weight - currentproductstock);
+                                DatabaseFunction.Product.StockUpdate(productid, -stock);
+                            }
+                        }
                     }
                 }
                 else
@@ -115,12 +155,14 @@ namespace EInvoice.Controllers
                     {
                         var cash = amount - paid;
                         DatabaseFunction.CompanyTransaction.CreateTransaction(companyid, cash);
+                        DatabaseFunction.Product.StockUpdate(productid, weight);
                         //DatabaseFunction.CompanyCase.CaseUpdate(paid);
                     }
                     else
                     {
                         var cash = amount - paid;
                         DatabaseFunction.CompanyTransaction.CreateTransaction(companyid, -paid);
+                        DatabaseFunction.Product.StockUpdate(productid, -weight);
                         //   DatabaseFunction.CompanyCase.CaseUpdate(-paid);
                     }
                     result = "Succesfully";
